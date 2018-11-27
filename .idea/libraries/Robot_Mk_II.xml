@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Robot Mk II">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Robot-Mk-II/build/libs/Robot Mk II.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
