@@ -18,7 +18,7 @@ public class RobotInstance { // Declares robot components.
     public Solenoid solGrabber1, solGrabber2;
 	public DigitalInput limTopA, limBottomA, limTopB, limBottomB;
 	public Encoder LeftEnc, RightEnc;
-	//ADXRS450_Gyro gyro;
+	ADXRS450_Gyro gyro;
 	RobotAuto auto;
 	double outputA;
 	double outputB;
@@ -35,6 +35,7 @@ public class RobotInstance { // Declares robot components.
 	private final static int cameraHeight = 640;
 	private final static double DistanceVal = (8 * Math.PI)/360; //1 rotation = 8pi inches
 
+	public Subsystems subsystems;
 	public Subsystems.Lift lift;
 	public Subsystems.Drivetrain drivetrain;
 	public Subsystems.Grabber grabber;
@@ -62,7 +63,7 @@ public class RobotInstance { // Declares robot components.
 		LeftEnc  = new Encoder(4,5,true,EncodingType.k4X);
 		RightEnc = new Encoder(6,7,false,EncodingType.k4X);
 
-		//gyro = new ADXRS450_Gyro(Port.kOnboardCS0);
+		gyro = new ADXRS450_Gyro(Port.kOnboardCS0);
 
 		AutoSpeed = 0.2; // SET AUTONOMOUS SPEED HERE
 		TeleSpeed = 0.5; // SET TELEOP SPEED HERE
@@ -83,9 +84,10 @@ public class RobotInstance { // Declares robot components.
 		SmartDashUpdate();
 
 		//Subsystems go here
-		lift = new Subsystems().new Lift();
-		drivetrain = new Subsystems().new Drivetrain();
-		grabber = new Subsystems().new Grabber();
+		subsystems = new Subsystems();
+		lift = subsystems.new Lift();
+		drivetrain = subsystems.new Drivetrain();
+		grabber = subsystems.new Grabber();
 	}
 
 	void encoderSetup(){
@@ -117,11 +119,11 @@ public class RobotInstance { // Declares robot components.
 	
 	public double getGyroAngle() { // Gets and sets gyro angle simultaneously -- !!ONLY RUN ONCE PER CYCLE!!
 		Timer.delay(.001); // Sets a uniform delay for calculation
-//		if (gyro.getRate() >= 1 || gyro.getRate() <= -1) { // Deadzone; prevents slight input
-//			gyroAngle += (gyro.getRate() * .001) * 20;
+		if (gyro.getRate() >= 1 || gyro.getRate() <= -1) { // Deadzone; prevents slight input
+			gyroAngle += (gyro.getRate() * .001) * 20;
 			//SmartDashboard.putNumber("gyroAngle", gyroAngle);
 			//System.out.println(gyroAngle + "    " + SmartDashboard.getNumber("gyroAngle", 699));// Increments gyroAngle by rate * time
-//		}
+		}
 		return gyroAngle; // Returns the current gyro angle
 	}
 	

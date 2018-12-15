@@ -41,8 +41,9 @@ public class Robot extends IterativeRobot {
     }
   @Override
   public void robotInit() {
-  //    dozer.CameraThread(1);
+      //dozer = new RobotInstance();
       setRobotInstance();
+      dozer.CameraThread(1);
       dozer.drivetrain.setDriveMotorSpeed(0,0,0,0);
       SendableChooser<String> autoChooser = new SendableChooser<>();
       autoChooser.addDefault("Position 1", "1");
