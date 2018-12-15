@@ -35,17 +35,13 @@ public class Robot extends IterativeRobot {
     private synchronized static void setRobotInstance() {
         // Allows you to make a static instance of RobotInstance so you can use it in commands
         dozer = new RobotInstance();
+        /*/ This function is run when the robot is first started up and should be
+         * used for any initialization code.
+         */
     }
-
-  /**
-   * This function is run when the robot is first started up and should be
-   * used for any initialization code.
-   */
-
-
   @Override
   public void robotInit() {
-      dozer.CameraThread(1);
+  //    dozer.CameraThread(1);
       setRobotInstance();
       dozer.drivetrain.setDriveMotorSpeed(0,0,0,0);
       SendableChooser<String> autoChooser = new SendableChooser<>();
@@ -54,7 +50,7 @@ public class Robot extends IterativeRobot {
       autoChooser.addObject("Position 3", "3");
       autoChooser.addObject("Test", "4");
       SmartDashboard.putData("Auto choices", autoChooser);
-      CSVReader.CSVRead("frc/team3067/robot/motionprofile/redTestPath/redTestPath_left_detailed.csv");
+      //CSVReader.CSVRead("frc/team3067/robot/motionprofile/redTestPath/redTestPath_left_detailed.csv");
 
   }
 
