@@ -29,22 +29,16 @@ import org.opencv.core.Mat;
  */
 public class Robot extends IterativeRobot {
 
-    public static RobotInstance dozer;
+
     SendableChooser autoChooser;
 
-    private synchronized static void setRobotInstance() {
-        // Allows you to make a static instance of RobotInstance so you can use it in commands
-        dozer = new RobotInstance();
-        /*/ This function is run when the robot is first started up and should be
-         * used for any initialization code.
-         */
-    }
+
   @Override
   public void robotInit() {
       //dozer = new RobotInstance();
-      setRobotInstance();
-      dozer.CameraThread(1);
-      dozer.drivetrain.setDriveMotorSpeed(0,0,0,0);
+
+      camera.CameraThread(1);
+      drivetrain.setDriveMotorSpeed(0,0,0,0);
       SendableChooser<String> autoChooser = new SendableChooser<>();
       autoChooser.addDefault("Position 1", "1");
       autoChooser.addObject("Position 2", "2");
