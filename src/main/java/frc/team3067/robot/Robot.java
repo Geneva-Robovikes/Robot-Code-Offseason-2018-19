@@ -11,10 +11,14 @@ import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.*;
+import frc.team3067.robot.Subsystems.DrivetrainSubsystem;
+import frc.team3067.robot.Subsystems.GrabberSubsystem;
+import frc.team3067.robot.Subsystems.LiftSubsystem;
 import org.opencv.imgproc.*;
 import org.opencv.core.Mat;
 
@@ -29,22 +33,31 @@ import org.opencv.core.Mat;
  */
 public class Robot extends IterativeRobot {
 
-    public static RobotInstance dozer;
-    SendableChooser autoChooser;
 
-    private synchronized static void setRobotInstance() {
-        // Allows you to make a static instance of RobotInstance so you can use it in commands
-        dozer = new RobotInstance();
-        /*/ This function is run when the robot is first started up and should be
-         * used for any initialization code.
-         */
-    }
+    SendableChooser autoChooser;
+    public static RobotStick stick;
+    public static DrivetrainSubsystem drive;
+    public static GrabberSubsystem grabber;
+    public static LiftSubsystem lift;
+    public static Camera camera;
+    public static String switchScale;
+    public static RobotAuto auto;
+
   @Override
   public void robotInit() {
-      //dozer = new RobotInstance();
-      setRobotInstance();
-      dozer.CameraThread(1);
-      dozer.drivetrain.setDriveMotorSpeed(0,0,0,0);
+      stick = new RobotStick(5);
+
+      drive = new DrivetrainSubsystem();
+      grabber = new GrabberSubsystem();
+      lift = new LiftSubsystem();
+
+      auto = new RobotAuto();
+
+      camera.CameraThread(1);
+
+      drive.setDriveMotorSpeed(0,0,0,0);
+
+      switchScale = DriverStation.getInstance().getGameSpecificMessage();
       SendableChooser<String> autoChooser = new SendableChooser<>();
       autoChooser.addDefault("Position 1", "1");
       autoChooser.addObject("Position 2", "2");
@@ -65,7 +78,9 @@ public class Robot extends IterativeRobot {
    */
 
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+      Dashboard.SmartDashUpdate();
+  }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select
@@ -84,16 +99,16 @@ public class Robot extends IterativeRobot {
       System.out.println("Auto selected: " + autoSelected);
       switch (autoSelected) {
           case 1:
-            dozer.auto.Pos1Auto();
+            auto.Pos1Auto();
               break;
           case 2:
-              dozer.auto.Pos2Auto();
+              auto.Pos2Auto();
               break;
           case 3:
-              dozer.auto.Pos3Auto();
+              auto.Pos3Auto();
               break;
           case 4:
-              dozer.auto.BasicAuto();
+              auto.BasicAuto();
       }
   }
 
@@ -109,8 +124,17 @@ public class Robot extends IterativeRobot {
    * This function is called periodically during operator control.
    */
   @Override
-  public void teleopPeriodic() {
-      dozer.update();
+  public void teleopPeriodic() {/*
+      TeleSpeed = SmartDashboard.getNumber("TeleSpeed", 0.5);
+      TurnSpeed = SmartDashboard.getNumber("TurnSpeed", 0.5);
+      driveSmoothing = SmartDashboard.getNumber("smoothing", driveSmoothing);
+      smoothSteering = SmartDashboard.getBoolean("smoothSteering", true);
+      if(smoothSteering){setMotorSmooth();} else{setMotorStandard();} // Sets drive motors
+      grabberGrab(); // Sets grabber motors
+      grabberSol(); // Sets grabber solenoid
+      new Sequential(); // Sets lift motors
+      SmartDashUpdate();
+      */
   }
 
   /**
@@ -118,6 +142,6 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void testPeriodic() {
-      dozer.update();
+ //     update();
   }
 }

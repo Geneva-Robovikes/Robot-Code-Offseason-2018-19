@@ -1,20 +1,14 @@
 package frc.team3067.robot.Commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.team3067.robot.CSVReader;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team3067.robot.Robot;
 
-
-public class Autopath extends Command {
-    private String[][] leftArray;
-    private String[][] rightArray;
-    private int tick = 0;
-    public Autopath(String CSVfile) {
-        // THIS COMMAND USES THE REGULAR CSV FILES, NOT THE DETAILED ONES!!!
-        requires(Robot.drive);
-        String CSVfilebase = CSVfile.endsWith("_left.csv")?(CSVfile.substring(0,CSVfile.length()-9)):(CSVfile.endsWith("_right.csv")?CSVfile.substring(0,CSVfile.length()-10):CSVfile);
-        leftArray = CSVReader.CSVRead(CSVfilebase+"_left.csv");
-        rightArray = CSVReader.CSVRead(CSVfilebase+"_right.csv");
+public class Lift_ToBottom extends Command {
+    public Lift_ToBottom() {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
+        requires(Robot.lift);
     }
 
 
@@ -24,7 +18,7 @@ public class Autopath extends Command {
      */
     @Override
     protected void initialize() {
-        Robot.drive.setDriveMotorSpeed(0,0,0,0);
+        Robot.lift.liftLower();
     }
 
 
@@ -34,12 +28,7 @@ public class Autopath extends Command {
      */
     @Override
     protected void execute() {
-        Robot.drive.setDriveMotorSpeed(
-                Integer.parseInt(leftArray[tick][2]),
-                Integer.parseInt(leftArray[tick][2]),
-                Integer.parseInt(rightArray[tick][2]),
-                Integer.parseInt(rightArray[tick][2]));
-        tick++;
+
     }
 
 
@@ -63,12 +52,7 @@ public class Autopath extends Command {
     @Override
     protected boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        try{
-            return (leftArray[tick][2] == null||rightArray[tick][2] == null);
-        }
-        catch(ArrayIndexOutOfBoundsException e){
-            return true;
-        }
+        return Robot.lift.limTopA.get();
     }
 
 
@@ -80,7 +64,7 @@ public class Autopath extends Command {
      */
     @Override
     protected void end() {
-        Robot.drive.setDriveMotorSpeed(0,0,0,0);
+        Robot.lift.liftStop();
     }
 
 

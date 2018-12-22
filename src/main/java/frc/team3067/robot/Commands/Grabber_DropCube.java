@@ -1,21 +1,18 @@
 package frc.team3067.robot.Commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-import frc.team3067.robot.CSVReader;
 import frc.team3067.robot.Robot;
 
 
-public class Autopath extends Command {
-    private String[][] leftArray;
-    private String[][] rightArray;
-    private int tick = 0;
-    public Autopath(String CSVfile) {
-        // THIS COMMAND USES THE REGULAR CSV FILES, NOT THE DETAILED ONES!!!
-        requires(Robot.drive);
-        String CSVfilebase = CSVfile.endsWith("_left.csv")?(CSVfile.substring(0,CSVfile.length()-9)):(CSVfile.endsWith("_right.csv")?CSVfile.substring(0,CSVfile.length()-10):CSVfile);
-        leftArray = CSVReader.CSVRead(CSVfilebase+"_left.csv");
-        rightArray = CSVReader.CSVRead(CSVfilebase+"_right.csv");
+public class Grabber_DropCube extends Command {
+    private double getSeconds;
+    private boolean finish = false;
+    public Grabber_DropCube(double seconds){
+        requires(Robot.grabber);
+        getSeconds = seconds;
     }
+
 
 
     /**
@@ -24,7 +21,13 @@ public class Autopath extends Command {
      */
     @Override
     protected void initialize() {
-        Robot.drive.setDriveMotorSpeed(0,0,0,0);
+        Robot.grabber.grabberOn();
+        Timer.delay(getSeconds); //Seconds
+        Robot.grabber.grabberOpen();
+        Timer.delay(0.5); //Seconds
+        Robot.grabber.grabberOff();
+        Robot.grabber.grabberClose();
+        finish = true;
     }
 
 
@@ -34,12 +37,7 @@ public class Autopath extends Command {
      */
     @Override
     protected void execute() {
-        Robot.drive.setDriveMotorSpeed(
-                Integer.parseInt(leftArray[tick][2]),
-                Integer.parseInt(leftArray[tick][2]),
-                Integer.parseInt(rightArray[tick][2]),
-                Integer.parseInt(rightArray[tick][2]));
-        tick++;
+
     }
 
 
@@ -63,12 +61,7 @@ public class Autopath extends Command {
     @Override
     protected boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        try{
-            return (leftArray[tick][2] == null||rightArray[tick][2] == null);
-        }
-        catch(ArrayIndexOutOfBoundsException e){
-            return true;
-        }
+        return finish;
     }
 
 
@@ -80,7 +73,8 @@ public class Autopath extends Command {
      */
     @Override
     protected void end() {
-        Robot.drive.setDriveMotorSpeed(0,0,0,0);
+        Robot.grabber.grabberOff();
+        Robot.grabber.grabberClose();
     }
 
 

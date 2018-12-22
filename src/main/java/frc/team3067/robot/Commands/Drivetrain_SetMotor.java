@@ -1,20 +1,15 @@
 package frc.team3067.robot.Commands;
 
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Command;
-import frc.team3067.robot.CSVReader;
 import frc.team3067.robot.Robot;
 
 
-public class Autopath extends Command {
-    private String[][] leftArray;
-    private String[][] rightArray;
-    private int tick = 0;
-    public Autopath(String CSVfile) {
-        // THIS COMMAND USES THE REGULAR CSV FILES, NOT THE DETAILED ONES!!!
+public class Drivetrain_SetMotor extends Command {
+    public Drivetrain_SetMotor() {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
         requires(Robot.drive);
-        String CSVfilebase = CSVfile.endsWith("_left.csv")?(CSVfile.substring(0,CSVfile.length()-9)):(CSVfile.endsWith("_right.csv")?CSVfile.substring(0,CSVfile.length()-10):CSVfile);
-        leftArray = CSVReader.CSVRead(CSVfilebase+"_left.csv");
-        rightArray = CSVReader.CSVRead(CSVfilebase+"_right.csv");
     }
 
 
@@ -24,7 +19,7 @@ public class Autopath extends Command {
      */
     @Override
     protected void initialize() {
-        Robot.drive.setDriveMotorSpeed(0,0,0,0);
+
     }
 
 
@@ -34,15 +29,25 @@ public class Autopath extends Command {
      */
     @Override
     protected void execute() {
-        Robot.drive.setDriveMotorSpeed(
-                Integer.parseInt(leftArray[tick][2]),
-                Integer.parseInt(leftArray[tick][2]),
-                Integer.parseInt(rightArray[tick][2]),
-                Integer.parseInt(rightArray[tick][2]));
-        tick++;
+            Robot.drive.talLF.set(Robot.drive.TeleSpeed * -Robot.stick.getDY() + Robot.drive.TurnSpeed * Robot.stick.getDZ());
+            Robot.drive.talLB.set(Robot.drive.TeleSpeed * -Robot.stick.getDY() + Robot.drive.TurnSpeed * Robot.stick.getDZ());
+            Robot.drive.talRF.set(Robot.drive.TeleSpeed * Robot.stick.getDY() + Robot.drive.TurnSpeed * Robot.stick.getDZ());
+            Robot.drive.talRB.set(Robot.drive.TeleSpeed * Robot.stick.getDY() + Robot.drive.TurnSpeed * Robot.stick.getDZ());
     }
 
-
+    public void setMotorSmooth() { // Arcade drive
+        Robot.drive.talLF.set(scaleMotor(Robot.drive.TeleSpeed * -Robot.stick.getDY() + Robot.drive.TurnSpeed * Robot.stick.getDZ(), Robot.drive.talLF));
+        Robot.drive.talLB.set(scaleMotor(Robot.drive.TeleSpeed * -Robot.stick.getDY() + Robot.drive.TurnSpeed * Robot.stick.getDZ(), Robot.drive.talLB));
+        Robot.drive.talRF.set(scaleMotor(Robot.drive.TeleSpeed * Robot.stick.getDY() + Robot.drive.TurnSpeed * Robot.stick.getDZ(), Robot.drive.talRF));
+        Robot.drive.talRB.set(scaleMotor(Robot.drive.TeleSpeed * Robot.stick.getDY() + Robot.drive.TurnSpeed * Robot.stick.getDZ(), Robot.drive.talRB));
+    }
+    public double scaleMotor(double stickInput, Talon talon) {
+        double newMotorValue = talon.get() * (1 - Robot.drive.driveSmoothing) + stickInput * Robot.drive.driveSmoothing;
+        if (newMotorValue < .02 && newMotorValue > -.02)
+            return 0;
+        else
+            return newMotorValue;
+    }
     /**
      * <p>
      * Returns whether this command is finished. If it is, then the command will be removed and
@@ -63,12 +68,7 @@ public class Autopath extends Command {
     @Override
     protected boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        try{
-            return (leftArray[tick][2] == null||rightArray[tick][2] == null);
-        }
-        catch(ArrayIndexOutOfBoundsException e){
-            return true;
-        }
+        return false;
     }
 
 
@@ -80,7 +80,7 @@ public class Autopath extends Command {
      */
     @Override
     protected void end() {
-        Robot.drive.setDriveMotorSpeed(0,0,0,0);
+
     }
 
 
@@ -100,7 +100,6 @@ public class Autopath extends Command {
      */
     @Override
     protected void interrupted() {
-        end();
         super.interrupted();
     }
 }
