@@ -24,8 +24,7 @@ public class DrivetrainSubsystem extends Subsystem {
         gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
 
 
-        driveSmoothing = 0.3;
-        smoothSteering = true;
+
         gyro.reset();
 
     }
