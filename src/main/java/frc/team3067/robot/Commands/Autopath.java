@@ -1,7 +1,7 @@
 package frc.team3067.robot.Commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.team3067.robot.CSVReader;
+import frc.team3067.util.CSVReader;
 import frc.team3067.robot.Robot;
 
 

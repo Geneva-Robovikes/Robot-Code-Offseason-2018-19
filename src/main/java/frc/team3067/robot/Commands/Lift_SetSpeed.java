@@ -33,10 +33,10 @@ public class Lift_SetSpeed extends Command {
     protected void execute() {
         outputA = (Robot.stick.getButton(4) && !Robot.stick.getButton(6))? -Constants.kLiftSpeed /*down*/
                 :((!Robot.stick.getButton(4) && Robot.stick.getButton(6))? Constants.kLiftSpeed /*up*/ :0); //A Section
-        outputB = (Robot.stick.getButton(4) && !Robot.stick.getButton(6))? -Constants.kLiftSpeed /*down*/
-                :((!Robot.stick.getButton(4) && Robot.stick.getButton(6))? Constants.kLiftSpeed /*up*/ :0); //B Section
+/*        outputB = (Robot.stick.getButton(4) && !Robot.stick.getButton(6))? -Constants.kLiftSpeed /*down
+                :((!Robot.stick.getButton(4) && Robot.stick.getButton(6))? Constants.kLiftSpeed /*up :0); B Section*/
         Robot.lift.talLiftA.set(outputA);//These two set the motor speed at the end
-        Robot.lift.talLiftB.set(outputB);
+        Robot.lift.talLiftB.set(outputA);
     }
 
 

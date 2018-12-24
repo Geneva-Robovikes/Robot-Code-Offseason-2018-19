@@ -7,21 +7,14 @@
 
 package frc.team3067.robot;
 
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.networktables.*;
 import frc.team3067.robot.Subsystems.DrivetrainSubsystem;
 import frc.team3067.robot.Subsystems.GrabberSubsystem;
 import frc.team3067.robot.Subsystems.LiftSubsystem;
-import org.opencv.imgproc.*;
-import org.opencv.core.Mat;
-
+import frc.team3067.util.CrashTracker;
 
 
 /**
@@ -45,27 +38,33 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void robotInit() {
-      stick = new RobotStick(5);
+      CrashTracker.logRobotInit();
+      try {
+          stick = new RobotStick(5);
 
-      drive = new DrivetrainSubsystem();
-      grabber = new GrabberSubsystem();
-      lift = new LiftSubsystem();
+          drive = new DrivetrainSubsystem();
+          grabber = new GrabberSubsystem();
+          lift = new LiftSubsystem();
 
-      auto = new RobotAuto();
+          auto = new RobotAuto();
 
-      camera.CameraThread(1);
+          camera.CameraThread(1);
 
-      drive.setDriveMotorSpeed(0,0,0,0);
+          drive.setDriveMotorSpeed(0, 0, 0, 0);
 
-      switchScale = DriverStation.getInstance().getGameSpecificMessage();
-      SendableChooser<String> autoChooser = new SendableChooser<>();
-      autoChooser.addDefault("Position 1", "1");
-      autoChooser.addObject("Position 2", "2");
-      autoChooser.addObject("Position 3", "3");
-      autoChooser.addObject("Test", "4");
-      SmartDashboard.putData("Auto choices", autoChooser);
-      //CSVReader.CSVRead("frc/team3067/robot/motionprofile/redTestPath/redTestPath_left_detailed.csv");
-
+          switchScale = DriverStation.getInstance().getGameSpecificMessage();
+          SendableChooser<String> autoChooser = new SendableChooser<>();
+          autoChooser.addDefault("Position 1", "1");
+          autoChooser.addObject("Position 2", "2");
+          autoChooser.addObject("Position 3", "3");
+          autoChooser.addObject("Test", "4");
+          SmartDashboard.putData("Auto choices", autoChooser);
+          //CSVReader.CSVRead("frc/team3067/robot/motionprofile/redTestPath/redTestPath_left_detailed.csv");
+      }
+      catch(Throwable t){
+          CrashTracker.logThrowable(t);
+          throw t;
+      }
   }
 
   /**
@@ -95,20 +94,28 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousInit() {
-    int autoSelected = Integer.parseInt((String)autoChooser.getSelected()); // Turns the string into an integer for ease of use
-      System.out.println("Auto selected: " + autoSelected);
-      switch (autoSelected) {
-          case 1:
-            auto.Pos1Auto();
-              break;
-          case 2:
-              auto.Pos2Auto();
-              break;
-          case 3:
-              auto.Pos3Auto();
-              break;
-          case 4:
-              auto.BasicAuto();
+      CrashTracker.logAutoInit();
+      try {
+          int autoSelected = Integer.parseInt((String) autoChooser.getSelected()); // Turns the string into an integer for ease of use
+          System.out.println("Auto selected: " + autoSelected);
+          switch (autoSelected) {
+              case 1:
+                  auto.Pos1Auto();
+                  break;
+              case 2:
+                  auto.Pos2Auto();
+                  break;
+              case 3:
+                  auto.Pos3Auto();
+                  break;
+              case 4:
+                  auto.BasicAuto();
+                  break;
+          }
+      }
+      catch (Throwable t){
+          CrashTracker.logThrowable(t);
+          throw t;
       }
   }
 
