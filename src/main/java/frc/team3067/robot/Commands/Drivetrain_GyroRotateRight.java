@@ -1,18 +1,18 @@
 package frc.team3067.robot.Commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import static frc.team3067.robot.Robot.dozer;
+import frc.team3067.robot.Robot;
 
 
 public class Drivetrain_GyroRotateRight extends Command {
     private double getDegrees;
     public Drivetrain_GyroRotateRight(double degrees) {
-        requires(dozer.drivetrain);
+        requires(Robot.drive);
         getDegrees = degrees;
     }
     @Override
     protected void initialize() {
-        dozer.drivetrain.driveRotateRight();
+        Robot.drive.driveRotateRight();
     }
     @Override
     protected void execute() { }
@@ -20,11 +20,11 @@ public class Drivetrain_GyroRotateRight extends Command {
     @Override
     protected boolean isFinished() {
         //ends if the degrees rotated is greater than the target distance
-        return !(dozer.getGyroAngle() < getDegrees);
+        return !(Robot.drive.gyro.getAngle() < getDegrees);
     }
     @Override
     protected void end() {
-        dozer.drivetrain.driveStop();
+        Robot.drive.driveStop();
     }
     @Override
     protected void interrupted() {

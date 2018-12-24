@@ -12,8 +12,7 @@ import org.opencv.imgproc.Imgproc;
 
 public class Camera {
     UsbCamera camera;
-    private final static int cameraWidth = 480;
-    private final static int cameraHeight = 640;
+
     public void CameraThread(int mode){
         SmartDashboard.putNumber("Camera port", CameraServer.kBasePort);
         System.out.println("Camera port: " + CameraServer.kBasePort);
@@ -22,16 +21,16 @@ public class Camera {
                 System.out.println("Camera mode is in disabled mode. Video will not be captured.");
             case 1:
                 camera = CameraServer.getInstance().startAutomaticCapture();
-                camera.setResolution(cameraWidth,cameraHeight);
+                camera.setResolution(Constants.kCameraWidth,Constants.kCameraHeight);
                 System.out.println("Camera mode is in automatic capture mode. This will output directly to the SmartDashboard.");
             case 2:
                 camera = CameraServer.getInstance().startAutomaticCapture();
-                camera.setResolution(cameraWidth,cameraHeight);
+                camera.setResolution(Constants.kCameraWidth,Constants.kCameraHeight);
                 System.out.println("Camera mode is in autoprocess mode. This is a test and will output a filtered version of the footage.");
                 new Thread(() -> {
 
                     CvSink cvSink = CameraServer.getInstance().getVideo();
-                    CvSource outputStream = CameraServer.getInstance().putVideo("FULL SEND CAM", cameraWidth, cameraHeight);
+                    CvSource outputStream = CameraServer.getInstance().putVideo("FULL SEND CAM", Constants.kCameraWidth, Constants.kCameraHeight);
 
                     Mat source = new Mat();
                     Mat convertOutput = new Mat();
