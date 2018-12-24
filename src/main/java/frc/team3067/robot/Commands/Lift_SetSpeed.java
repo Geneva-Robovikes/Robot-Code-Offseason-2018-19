@@ -1,7 +1,6 @@
 package frc.team3067.robot.Commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.team3067.robot.Constants;
 import frc.team3067.robot.Robot;
 
 
@@ -31,10 +30,10 @@ public class Lift_SetSpeed extends Command {
      */
     @Override
     protected void execute() {
-        outputA = (Robot.stick.getButton(4) && !Robot.stick.getButton(6))? -Constants.kLiftSpeed /*down*/
-                :((!Robot.stick.getButton(4) && Robot.stick.getButton(6))? Constants.kLiftSpeed /*up*/ :0); //A Section
-        outputB = (Robot.stick.getButton(4) && !Robot.stick.getButton(6))? -Constants.kLiftSpeed /*down*/
-                :((!Robot.stick.getButton(4) && Robot.stick.getButton(6))? Constants.kLiftSpeed /*up*/ :0); //B Section
+        outputA = (Robot.stick.getButton(4) && !Robot.stick.getButton(6))? -Robot.lift.LiftSpeed /*down*/
+                :((!Robot.stick.getButton(4) && Robot.stick.getButton(6))? Robot.lift.LiftSpeed /*up*/ :0); //A Section
+        outputB = (Robot.stick.getButton(4) && !Robot.stick.getButton(6))? -Robot.lift.LiftSpeed /*down*/
+                :((!Robot.stick.getButton(4) && Robot.stick.getButton(6))? Robot.lift.LiftSpeed /*up*/ :0); //B Section
         Robot.lift.talLiftA.set(outputA);//These two set the motor speed at the end
         Robot.lift.talLiftB.set(outputB);
     }

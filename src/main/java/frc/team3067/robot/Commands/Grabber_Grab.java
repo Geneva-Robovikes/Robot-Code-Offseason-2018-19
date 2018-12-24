@@ -2,7 +2,6 @@ package frc.team3067.robot.Commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.team3067.robot.Constants;
 import frc.team3067.robot.Robot;
 
 
@@ -30,10 +29,10 @@ public class Grabber_Grab extends Command {
     protected void execute() {
         Robot.grabber.talGrabber.set(0);
         if (Robot.stick.getButton(2) && !Robot.stick.getButton(1)) {
-            Robot.grabber.talGrabber.set(Constants.kGrabberSpeed);
+            Robot.grabber.talGrabber.set(Robot.grabber.GrabberSpeed);
         }
         if (!Robot.stick.getButton(2) && Robot.stick.getButton(1)) {
-            Robot.grabber.talGrabber.set(-Constants.kGrabberSpeed);
+            Robot.grabber.talGrabber.set(-Robot.grabber.GrabberSpeed);
         }
     }
 

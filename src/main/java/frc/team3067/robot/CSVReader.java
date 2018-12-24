@@ -6,6 +6,9 @@ import java.io.*;
 import java.util.Arrays;
 
 public class CSVReader {
+   public static void main(String[] args){
+        CSVReader.CSVRead("C:\\Users\\2102062\\Documents\\Robot Mk II\\src\\main\\java\\frc\\team3067\\robot\\motionprofile\\redTestPath\\redTestPath_left_detailed.csv");
+   }
 
     public static String[][] CSVRead(String csvFile){
         int columns;
